@@ -23,20 +23,45 @@ const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [cart, setCart] = useState<Product[]>(() => {
-    // const storagedCart = Buscar dados do localStorage
+     const storagedCart = localStorage.getItem('@RocketShoes:cart');
 
-    // if (storagedCart) {
-    //   return JSON.parse(storagedCart);
-    // }
+    if (storagedCart) {
+      return JSON.parse(storagedCart);
+    }
 
     return [];
   });
 
   const addProduct = async (productId: number) => {
-    try {
-      // TODO
+    try { //Verificar se o produto existe no carrinho para incrementar a quantidade, e verificar a quantidade no estoque
+      const updatedCart = [...cart] // conceito de imutabilidade
+      const productExists = updatedCart.find(product => productId === productId) // verificando se o produto existe no cart
+      const stock = await api.get(`/stock/${productId}`) // pegando o elemento na API pelo ID que foi passado no parametro
+      const stockAmount = stock.data.amount; // .data vem do Axios pois está recebendo uma promisse
+      const currentAmount = productExists ? productExists.amount : 0; // se não existir, o amount é 0
+      const amount = currentAmount + 1
+
+      if(amount > stockAmount){
+        toast.error('Quantidade solicitada fora de estoque'); // erro caso estoure a quantidade 
+        return;
+      }
+
+      if(productExists){
+        productExists.amount = amount // adicionando 1 ao total de produto
+      } else {
+        const product = await api.get(`/products/${productId}`)
+
+        const newProduct = {
+          ...product.data, 
+          amount: 1
+        } // Lembrar de sempre usar o Data para visualizar dados de promisses
+        updatedCart.push(newProduct)
+      }
+
+      setCart(updatedCart) // Atribuindo o carrinho atualizado ao estado
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(updatedCart))  // utilizando o LocalStorage para atualizar o banco de dados
     } catch {
-      // TODO
+      toast.error('Erro na adição do produto');
     }
   };
 

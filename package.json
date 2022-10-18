@@ -1,5 +1,5 @@
 {
-  "name": "criando_um_hook_de_carrinho_de_compras",
+  "name": "ls",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -53,5 +53,17 @@
     "extends": [
       "react-app"
     ]
-  }
+  },
+  "description": "Hook Shop Cart",
+  "main": "jest.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matheusmfl/shoppingCart.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matheusmfl/shoppingCart/issues"
+  },
+  "homepage": "https://github.com/matheusmfl/shoppingCart#readme"
 }
