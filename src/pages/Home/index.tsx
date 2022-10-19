@@ -47,15 +47,15 @@ const Home = (): JSX.Element => {
   }, []);
 
   function handleAddProduct(id: number) {
-    TODO
+    addProduct(id)
   }
 
   return (
     <ProductList>
-      <li>
-        <img src="https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/modulo-redux/tenis1.jpg" alt="Tênis de Caminhada Leve Confortável" />
-        <strong>Tênis de Caminhada Leve Confortável</strong>
-        <span>R$ 179,90</span>
+      {products.map(product => (<li key={product.id}>
+        <img src={product.image} alt={product.title} />
+        <strong>{product.title}</strong>
+        <span>{product.priceFormatted}</span>
         <button
           type="button"
           data-testid="add-product-button"
@@ -63,12 +63,12 @@ const Home = (): JSX.Element => {
         >
           <div data-testid="cart-product-quantity">
             <MdAddShoppingCart size={16} color="#FFF" />
-            {cartItemsAmount[product.id] || 0} 2
+            {cartItemsAmount[product.id] || 0}
           </div>
 
           <span>ADICIONAR AO CARRINHO</span>
         </button>
-      </li>
+      </li>))}
     </ProductList>
   );
 };
